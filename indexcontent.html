@@ -15,7 +15,7 @@
 	</p>
 	<p><b><H3>System Diagram</H3></b><br>
 	</p>
-		<p><img src="/documentation/Diagram.png" alt="schema" style="width:100px height:300px"></p>
+		<p><img src="/Document/diagram_sensor.png" alt="schema" style="width:100px height:300px"></p>
 	<p><b><H3>Bills of Material / Budget</H3></b><br>
 	<table>
 			<tbody>
@@ -122,18 +122,18 @@
  
  	<p><b><H3>Mechanical Assembly</H3></b><br></p>
 	<p>This shows the circuit you have to build for the sensor to detect the distance of the car </p>
-	<p><img src="/documentation/teleSchema.png" alt="schema" style="width:100px height:300px">
+	<p><img src="/Document/circuit.jpg" alt="schema" style="width:100px height:300px">
 		<br>JP1 --- 2 is for the inner side of the buzzer. Positive. <br> --- 1 outer part of the buzzer. Negative.
 		
 		<p> Following the diagram and placing each components in a breadboard would ensure a working vibration sensor program </p>
 	
 	<p> Connect the particular camera module that I listed above to your Raspberry Pi 3.
-		<img src="/documentation/cameramodule.png" alt="schema" style="width:100px height:100px">
+		<img src="/Document/pi_camera.png" alt="schema" style="width:100px height:100px">
 		 <a href="https://www.raspberrypi.org/learning/getting-started-with-picamera/">Check this out to ensure you have a working camera for
 			 raspberry pi!</a>
 		
 	<p><b><H3>PCB/Soldering</H3></b><br>
-		<p> We tried implementing our working circuit to a PCB but it didn't work. </p>
+		<p>implementing PCB to the build didn't work. </p>
 	
 	<p><b><H3>Unit Testing</H3></b><br>
 		<p>You can use these programs for testing Ultrasonic Sensor if they are working properly.</p>
@@ -182,14 +182,14 @@
 		</p>
 	
 	<p> These are the folllowing files that we used.
-	<br><a href="/documentation/unit test/Sensor.py">Sensor.py</a></p>
+	<br><a href="/Document/BasicSensor.py">BasicSensor.py</a></p>
 	
 	
 	<p><b><H3>Production Testing</H3></b><br>
 		<p>All the part tested worked fine and you can run this project from only Sensor.py(Camera and motor will be included next semester)
 		
-		<p>Main program  <br><h4>testDrive.py</h4><br>
-			<code><pre>"
+		<p>Main program  <br><h4>Sensor.py</h4><br>
+			<code><pre>
 import RPi.GPIO as GPIO
 import time
 
@@ -232,7 +232,7 @@ class SonicController:
     
     print "Initializing Ultrasonic Range Finder"
     
-    GPIO.setup(TRIG, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
     
     GPIO.output(TRIG, False)
@@ -290,8 +290,10 @@ finally:
   
   GPIO.cleanup()
   print "exiting"
-"</pre></code>
-		
+  
+</pre>
+</code>
+</p>		
 	<p>These are the files that we used:
 	<br><a href="/documentation/production test/Sensor.py">Sensor.py</a>
 	
