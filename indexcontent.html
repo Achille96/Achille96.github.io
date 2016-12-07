@@ -2,6 +2,307 @@
  <HEADER ID="Header_Article_1">
   <H2>Building IoT Projects</H2>
  </HEADER>
+	<SECTION ID ="Section_14">
+<H2>Week14</H2>
+	<p><b><H3>Introduction</H3></b><br>
+	
+		This project's goal is too facilitate the use of parking. So our project is able to sense when a car isa bout to enter the parking lot
+		using ultrasonic sensors which will then automatically open the parking gate and activate a camera that will capture the car plate number
+		the system will read the plate number from the captured image and the number to a database. The database will associate the plate number to 
+		the client and send the bill to their smartphone so they can pay on the go. the current version of the project can detect the prximity of the car
+		and measure the distance. If the distance is under 70cm it will light up the LED.
+
+	</p>
+	<p><b><H3>System Diagram</H3></b><br>
+	</p>
+		<p><img src="/documentation/Diagram.png" alt="schema" style="width:100px height:300px"></p>
+	<p><b><H3>Bills of Material / Budget</H3></b><br>
+	<table>
+			<tbody>
+				<tr>
+				<th>Equipement</th>
+				<th>Quantity</th>
+				<th>Cost with tax</th>
+				</tr>
+				
+				<tr>
+				<td>Raspberry Pi 3 CanaKit</td>
+				<td>1</td>
+				<td align ="right">$99.99</td>
+				</tr>
+				
+				<tr>
+				<td>Pi Camera Module</td>
+				<td>1</td>
+				<td align ="right">$29.99</td>
+				</tr>
+				
+				<tr>
+				<td>HC-SR04 sensor</td>
+				<td>2</td>
+				<td align ="right">$12.99</td>
+				</tr>
+				
+				<tr>
+				<td>1 GPIO T Type Expansion Board + wires</td>
+				<td>1</td>
+				<td align ="right">$18.00</td>
+				</tr>
+				
+				<tr>
+				<td>2x180 Ohm Resistor</td>
+				<td>1 </td>
+				<td align ="right">$0.20</td>
+				</tr>
+				
+				<tr>
+				<td>LED</td>
+				<td>1 </td>
+				<td align ="right">$0.25</td>
+				</tr>
+				
+				<tr>
+				<td>Total</td>
+				<td> </td>
+				<td align ="right">$148.43(tax not inculded)</td>
+				</tr>
+			</tbody>
+		</table>
+		<p><i>Table 1: Required time for building the project.</i></p>	
+	<p><b><H3>Time Commitment</H3></b><br>
+		
+		<p><i>Table 1: budget of the project</i></p>	
+	<p><b><H4>Time Commitment</H4></b><br>
+		You will spend this amount of time finishing this project by this build guide.
+			<table>
+			<tbody>
+				<tr>
+				<th>Tasks</th>
+				<th>Time Required</th>
+				</tr>
+					
+				<tr>	
+				<td>Raspberry Pi 3B: install the OS and connect it to the internet</td>
+				<td align ="right">30 mins</td>
+				</tr>
+				
+				<tr>
+				<td>PCB Soldering: Printing PCB takes around 1 hour soldering and testing could take around 3 hours</td>
+				<td align ="right">4 hours</td>
+				</tr>
+				
+				<tr>
+				<td>Project Wiring, connect sensors, leds to raspberry pi</td>
+				<td align ="right">1 hour +</td>
+				</tr>
+				
+				<tr>
+				<td>Importing python code</td>
+				<td align ="right">15 mins</td>
+				</tr>
+				
+				<tr>
+				<td>Running code with your hardware connected</td>
+				<td align ="right">5 mins</td>
+				</tr>
+				
+				<tr>
+				<td>Unit testing for unexpected error</td>
+				<td align ="right">1 hour</td>
+				</tr>
+			
+				
+				<tr>
+				<th>Total Time Commitment</th>
+				<th align ="right">6 hr 50 mins</th>
+				</tr>
+			</tbody>
+		</table
+		<p><i>Table 2: Required time for building the project.</i></p>		
+ 
+ 	<p><b><H3>Mechanical Assembly</H3></b><br></p>
+	<p>This shows the circuit you have to build for the sensor to detect the distance of the car </p>
+	<p><img src="/documentation/teleSchema.png" alt="schema" style="width:100px height:300px">
+		<br>JP1 --- 2 is for the inner side of the buzzer. Positive. <br> --- 1 outer part of the buzzer. Negative.
+		
+		<p> Following the diagram and placing each components in a breadboard would ensure a working vibration sensor program </p>
+	
+	<p> Connect the particular camera module that I listed above to your Raspberry Pi 3.
+		<img src="/documentation/cameramodule.png" alt="schema" style="width:100px height:100px">
+		 <a href="https://www.raspberrypi.org/learning/getting-started-with-picamera/">Check this out to ensure you have a working camera for
+			 raspberry pi!</a>
+		
+	<p><b><H3>PCB/Soldering</H3></b><br>
+		<p> We tried implementing our working circuit to a PCB but it didn't work. </p>
+	
+	<p><b><H3>Unit Testing</H3></b><br>
+		<p>You can use these programs for testing Ultrasonic Sensor if they are working properly.</p>
+	
+		
+		<p><b> HC-SR04 </b><br> 
+		<code><pre>"
+		import RPi.GPIO as GPIO
+		import time
+		GPIO.setmode(GPIO.BCM)
+
+		TRIG = 23 
+		ECHO = 24
+
+		print "Distance Measurement In Progress"
+
+		GPIO.setup(TRIG,GPIO.OUT)
+		GPIO.setup(ECHO,GPIO.IN)
+
+		GPIO.output(TRIG, False)
+		print "Waiting For Sensor To Settle"
+		time.sleep(2)
+
+		GPIO.output(TRIG, True)
+		time.sleep(0.00001)
+		GPIO.output(TRIG, False)
+
+		while GPIO.input(ECHO)==0:
+		pulse_start = time.time()
+
+		while GPIO.input(ECHO)==1:
+		pulse_end = time.time()
+
+		pulse_duration = pulse_end - pulse_start
+
+		distance = pulse_duration * 17150
+
+		distance = round(distance, 2)
+
+		print "Distance:",distance,"cm"
+
+		GPIO.cleanup()
+		</pre>
+		</code>
+		
+		</p>
+	
+	<p> These are the folllowing files that we used.
+	<br><a href="/documentation/unit test/Sensor.py">Sensor.py</a></p>
+	
+	
+	<p><b><H3>Production Testing</H3></b><br>
+		<p>All the part tested worked fine and you can run this project from only Sensor.py(Camera and motor will be included next semester)
+		
+		<p>Main program  <br><h4>testDrive.py</h4><br>
+			<code><pre>"
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+
+SPEED_OF_SOUND = 34000 #cm/s    
+DISTANCE_TO_CLOSED_DOOR = 70 #cm  - is actually about 60 but get readings up to 68 sometimes
+SAMPLE_SPEED = 5 #seconds
+
+# GPIO pin numbers
+TRIG = 23
+ECHO = 24
+LED_OPEN = 12
+LED_RUN = 25
+
+class SonicController:
+  def readDistance(self):
+
+    print "Distance Measurement In Progress " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())    
+    
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+    
+    pulse_start = time.time()
+    while GPIO.input(ECHO)==0:
+      pulse_start = time.time()
+    
+    while GPIO.input(ECHO)==1:
+      pulse_end = time.time()      
+    
+    pulse_duration = pulse_end - pulse_start
+    roundtrip_duration = pulse_duration * SPEED_OF_SOUND
+    one_way_distance = roundtrip_duration/2
+    print "    Distance: %.2f cm" %one_way_distance
+    return one_way_distance
+
+  def init(self):
+    
+    print "Initializing Ultrasonic Range Finder"
+    
+    GPIO.setup(TRIG, GPIO.OUT, pull_up_down = GPIO.PUD_DOWN)
+    GPIO.setup(ECHO, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    
+    GPIO.output(TRIG, False)
+    print "Waiting For Sensor To Settle"
+    time.sleep(2)
+
+  def teardown(self):
+    print "Tearing down Ultrasonic Range Finder"
+    GPIO.output(TRIG, False)
+
+
+class LedController:
+  def init(self):
+    print "Initializing LED"
+    GPIO.setup(LED_OPEN, GPIO.OUT)
+    GPIO.setup(LED_RUN, GPIO.OUT)
+    GPIO.output(LED_RUN, True)
+  
+  def turnOnDoorLed(self):
+    print "    Turning LED on"
+    GPIO.output(LED_OPEN, True)
+  
+  def turnOffDoorLed(self):
+    print "    Turning LED off"
+    GPIO.output(LED_OPEN, False)
+
+  def teardown(self):
+    print "Tearing down LED"
+    self.turnOffDoorLed()
+    GPIO.output(LED_RUN, False)
+
+
+led = LedController()
+led.init()
+
+sensor = SonicController()
+sensor.init()
+
+try:
+  while True:
+    distance = sensor.readDistance()
+    if distance < DISTANCE_TO_CLOSED_DOOR:
+      print "    Door open"
+      led.turnOnDoorLed()
+    else:
+      print "    Door closed"
+      led.turnOffDoorLed()
+    
+    time.sleep(SAMPLE_SPEED)
+except KeyboardInterrupt:
+    print "keyboard interrupt caught"
+finally:
+  sensor.teardown()
+  led.teardown()
+  
+  GPIO.cleanup()
+  print "exiting"
+"</pre></code>
+		
+	<p>These are the files that we used:
+	<br><a href="/documentation/production test/Sensor.py">Sensor.py</a>
+	
+	
+	
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/-nUCVmVpQG4" frameborder="0" allowfullscreen=""></iframe>
+	
+	<p><b><H3>Reproducibility Based on Instructions</H3></b><br>
+		
+	<p>Currently, the it is possible to reproduce the project by following the codes and the circuit diagram. </p>
+</SECTION>
 	
 	<SECTION ID = "Section_13">
 	<H3>Week 13</H3>
