@@ -1,5 +1,5 @@
 ---
-bibliography: ThunderBoltCitations.bib
+bibliography: SPPCitations.bib
 csl: apa.csl
 ---
 
